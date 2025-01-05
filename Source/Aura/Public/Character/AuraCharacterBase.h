@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "UObject/ObjectPtr.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class USkeletalMeshComponent;
@@ -15,7 +16,7 @@ class UAttributeSet;
 class UGameplayEffect;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
