@@ -11,18 +11,18 @@ class UAbilitySystemComponent;
 class UGameplayEffect;
 
 UENUM(BlueprintType)
-enum class EEffectApplicationPolicy
+enum class EEffectApplicationPolicy : uint8
 {
-	ApplyOnOverlap,
-	ApplyOnEndOverlap,
-	DoNotApply
+	ApplyOnOverlap UMETA(DisplayName = "Apply On Overlap"),
+	ApplyOnEndOverlap UMETA(DisplayName = "Apply On End Overlap"),
+	DoNotApply UMETA(DisplayName = "Do Not Apply")
 };
 
 UENUM(BlueprintType)
-enum class EEffectRemovalPolicy
+enum class EEffectRemovalPolicy : uint8
 {
-	RemoveOnEndOverlap,
-	DoNotRemove
+	RemoveOnEndOverlap UMETA(DisplayName = "Remove On End Overlap"),
+	DoNotRemove UMETA(DisplayName = "Do Not Remove")
 };
 
 UCLASS()
