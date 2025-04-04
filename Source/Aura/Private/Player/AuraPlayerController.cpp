@@ -4,6 +4,7 @@
 #include "Player/AuraPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "NiagaraSystem.h"
@@ -19,7 +20,20 @@ AAuraPlayerController::AAuraPlayerController()
 	CachedDestination = FVector::ZeroVector;
 	FollowTime = 0.f;
 }
+void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(1, 3.f, FColor::Red, *InputTag.ToString());
+}
 
+void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(2, 3.f, FColor::Blue, *InputTag.ToString());
+}
+
+void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	GEngine->AddOnScreenDebugMessage(3, 3.f, FColor::Green, *InputTag.ToString());
+}
 void AAuraPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -44,21 +58,21 @@ void AAuraPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	UAuraInputComponent* AuraInputComponent = CastChecked<UAuraInputComponent>(InputComponent);
+	AuraInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
+	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+	//AuraInputComponent->BindAction(ClickMoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::MoveToCursor);
+	//// Setup mouse input events
+	//AuraInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &AAuraPlayerController::OnInputStarted);
+	//AuraInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::OnSetDestinationTriggered);
+	//AuraInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &AAuraPlayerController::OnSetDestinationReleased);
+	//AuraInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &AAuraPlayerController::OnSetDestinationReleased);
 
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::Move);
-	EnhancedInputComponent->BindAction(ClickMoveAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::MoveToCursor);
-	// Setup mouse input events
-	EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Started, this, &AAuraPlayerController::OnInputStarted);
-	EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::OnSetDestinationTriggered);
-	EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &AAuraPlayerController::OnSetDestinationReleased);
-	EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &AAuraPlayerController::OnSetDestinationReleased);
-
-	// Setup touch input events
-	EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Started, this, &AAuraPlayerController::OnInputStarted);
-	EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::OnTouchTriggered);
-	EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &AAuraPlayerController::OnTouchReleased);
-	EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &AAuraPlayerController::OnTouchReleased);
+	//// Setup touch input events
+	//AuraInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Started, this, &AAuraPlayerController::OnInputStarted);
+	//AuraInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &AAuraPlayerController::OnTouchTriggered);
+	//AuraInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &AAuraPlayerController::OnTouchReleased);
+	//AuraInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &AAuraPlayerController::OnTouchReleased);
 }
 
 void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
