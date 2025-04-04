@@ -14,6 +14,7 @@ struct FInputActionValue;
 class IEnemyInterface;
 class UAuraInputConfig;
 class UAuraAbilitySystemComponent;
+class USplineComponent;
 
 /**
  * 
@@ -36,7 +37,7 @@ private:
 public:
 	/** Time Threshold to know if it was a short press */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
+	float ShortPressThreshold = 0.5f;
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	UNiagaraSystem* FXCursor;
@@ -69,6 +70,16 @@ private:
 	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
 
 	UAuraAbilitySystemComponent* GetASC();
+	FVector CachedDestination = FVector::ZeroVector;
+	float FollowTime = 0.f; // For how long it has been pressed
+	bool bAutoRunning = false;
+	bool bTargeting = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius = 50.f;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
 protected:
 	/** Input handlers for SetDestination action. */
 	void OnInputStarted();
@@ -78,8 +89,6 @@ protected:
 	void OnTouchReleased();
 
 private:
-	FVector CachedDestination;
 
 	bool bIsTouch; // Is it a touch device
-	float FollowTime; // For how long it has been pressed
 };
