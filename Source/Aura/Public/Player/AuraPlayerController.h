@@ -26,11 +26,11 @@ class AURA_API AAuraPlayerController : public APlayerController
 public:
 	AAuraPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
-	void AutoRun();
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 private:
+	void AutoRun();
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> ClickMoveAction;
 
@@ -57,7 +57,7 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void Move(const FInputActionValue& InputActionValue);
-
+	FHitResult CursorHit;
 	void CursorTrace();
 	IEnemyInterface* LastActor;
 	IEnemyInterface* ThisActor;
