@@ -26,6 +26,7 @@ class AURA_API AAuraPlayerController : public APlayerController
 public:
 	AAuraPlayerController();
 	virtual void PlayerTick(float DeltaTime) override;
+	void AutoRun();
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
